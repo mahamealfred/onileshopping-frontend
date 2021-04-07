@@ -1,8 +1,27 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 import logo from '../assets/images/login/01.png'
+import { loginAction } from '../redux/actions/loginAction'
 
-export default class LoginForm extends Component { 
+class LoginForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        email: '',
+        password: ''};
+      }
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        await this.props.loginAction(data)
+    }
+    handleChange=(e)=> {
+        this.setState({[e.target.name]: e.target.value});
+      }
     render() {
         return (
             <div>
@@ -18,17 +37,17 @@ export default class LoginForm extends Component {
                                                     <div className="p-3">
                                                         <h2 className="mb-2">Sign In</h2>
                                                         <p>Login to stay connected.</p>
-                                                        <form>
+                                                        <form  onSubmit={(e)=>this.handleSubmit(e)} method="post">
                                                             <div className="row">
                                                                 <div className="col-lg-12">
                                                                     <div className="floating-label form-group">
-                                                                        <input className="floating-input form-control" type="email" placeholder=" " />
+                                                                        <input className="floating-input form-control" type="email" placeholder=" " name="email" value={this.state.email} onChange={this.handleChange}/>
                                                                         <label>Email</label>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-12">
                                                                     <div className="floating-label form-group">
-                                                                        <input className="floating-input form-control" type="password" placeholder=" " />
+                                                                        <input className="floating-input form-control" type="password" placeholder=" "name="password" value={this.state.password} onChange={this.handleChange}/>
                                                                         <label>Password</label>
                                                                     </div>
                                                                 </div>
@@ -66,3 +85,21 @@ export default class LoginForm extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        loginState: state.login,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loginAction: (data) =>
+            dispatch(loginAction(data)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+
+
+

@@ -6,7 +6,7 @@ import {
     CLOSE_MESSAGE,
 } from '../types/loginTypes';
 
-export const loginAction = (data, history) => async (dispatch) => {
+export const loginAction = (data) => async (dispatch) => {
     try {
         dispatch(loginUserRequest());
         const res = await axios.post(
